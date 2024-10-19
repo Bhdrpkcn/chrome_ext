@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import Button from "../components/Button";
+import ChatBox from "../components/ChatBox";
 
 const Drawer = ({
   isOpen,
@@ -31,7 +32,7 @@ const Drawer = ({
         <Button onClick={onClose}>Close</Button>
       </header>
       <div style={{ marginTop: "1rem" }}>
-        <p>This is your content inside the drawer.</p>
+        <ChatBox />
       </div>
     </div>
   );
@@ -48,7 +49,7 @@ function ContentScript() {
     <div className="App">
       <header
         className="App-header"
-        style={{ position: "fixed", top: 0, right: 0, zIndex: 9999 }}
+        style={{ position: "fixed", top: 50, right: 0, zIndex: 9999 }}
       >
         <Button onClick={toggleDrawer} style={{ padding: "10px 20px" }}>
           {isDrawerOpen ? "Close Extension" : "Open Extension"}

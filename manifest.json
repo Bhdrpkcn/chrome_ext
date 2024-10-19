@@ -25,5 +25,6 @@
     "tabs",
     "storage",
     "history"
-  ]
+  ],
+  "host_permissions": ["https://YOUR_GEMINI_AI_API_ENDPOINT/*"]
 }
