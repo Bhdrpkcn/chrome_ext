@@ -1,12 +1,8 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useRef, useEffect } from "react";
+import { useApiStore } from "../store/api/apiStore";
 
 const ChatBox = () => {
-  const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
-    []
-  );
-  const [input, setInput] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const { messages, input, loading, setInput, sendMessage } = useApiStore();
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -15,45 +11,6 @@ const ChatBox = () => {
         chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
-
-  const fetchGeminiResponse = async (userMessage: string) => {
-    setLoading(true);
-
-    const genAI = new GoogleGenerativeAI(
-      import.meta.env.VITE_GEMINI_AI_API_KEY
-    );
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-
-    const prompt = userMessage;
-    try {
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const text = await response.text();
-
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: "ai", text: text },
-      ]);
-    } catch (error) {
-      console.error("Error fetching AI response:", error);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: "ai", text: "Error: Could not reach the AI service." },
-      ]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const sendMessage = () => {
-    if (!input.trim()) return;
-
-    setMessages([...messages, { sender: "user", text: input }]);
-
-    fetchGeminiResponse(input);
-
-    setInput("");
-  };
 
   return (
     <div
@@ -65,7 +22,6 @@ const ChatBox = () => {
         backgroundColor: "#f4f4f4",
       }}
     >
-      {/* Messages container with auto-scroll */}
       <div
         ref={chatContainerRef}
         style={{
@@ -98,15 +54,9 @@ const ChatBox = () => {
           </div>
         ))}
 
-        {/* Display loading message when fetching */}
-        {loading && (
-          <div style={{ textAlign: "center", marginTop: "10px" }}>
-            <span>Loading...</span>
-          </div>
-        )}
+        {loading && <div>Loading...</div>}
       </div>
 
-      {/* Input section fixed at the bottom */}
       <div
         style={{
           display: "flex",
