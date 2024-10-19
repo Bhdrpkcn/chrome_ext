@@ -19,6 +19,8 @@
   },
   "options_page": "options.html",
   "permissions": [
+    "activeTab",
+    "scripting",
     "background",
     "contextMenus",
     "bookmarks",
@@ -26,5 +28,11 @@
     "storage",
     "history"
   ],
-  "host_permissions": ["https://YOUR_GEMINI_AI_API_ENDPOINT/*"]
+  "host_permissions": ["https://generativeai.googleapis.com/*"],
+  "web_accessible_resources": [
+    {
+      "resources": ["src/assets/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
