@@ -1,3 +1,4 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import React, { useState, useEffect, useRef } from "react";
 
 const ChatBox = () => {
@@ -5,7 +6,7 @@ const ChatBox = () => {
     []
   );
   const [input, setInput] = useState<string>("");
-
+  const [loading, setLoading] = useState<boolean>(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -15,28 +16,23 @@ const ChatBox = () => {
     }
   }, [messages]);
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
+  const fetchGeminiResponse = async (userMessage: string) => {
+    setLoading(true);
 
-    setMessages([...messages, { sender: "user", text: input }]);
+    const genAI = new GoogleGenerativeAI(
+      import.meta.env.VITE_GEMINI_AI_API_KEY
+    );
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
-    setInput("");
-
+    const prompt = userMessage;
     try {
-      const response = await fetch("YOUR_GEMINI_AI_API_ENDPOINT", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer YOUR_API_KEY`,
-        },
-        body: JSON.stringify({ message: input }),
-      });
-
-      const data = await response.json();
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = await response.text();
 
       setMessages((prevMessages) => [
         ...prevMessages,
-        { sender: "ai", text: data.response },
+        { sender: "ai", text: text },
       ]);
     } catch (error) {
       console.error("Error fetching AI response:", error);
@@ -44,7 +40,19 @@ const ChatBox = () => {
         ...prevMessages,
         { sender: "ai", text: "Error: Could not reach the AI service." },
       ]);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const sendMessage = () => {
+    if (!input.trim()) return;
+
+    setMessages([...messages, { sender: "user", text: input }]);
+
+    fetchGeminiResponse(input);
+
+    setInput("");
   };
 
   return (
@@ -89,6 +97,13 @@ const ChatBox = () => {
             </span>
           </div>
         ))}
+
+        {/* Display loading message when fetching */}
+        {loading && (
+          <div style={{ textAlign: "center", marginTop: "10px" }}>
+            <span>Loading...</span>
+          </div>
+        )}
       </div>
 
       {/* Input section fixed at the bottom */}
@@ -121,8 +136,9 @@ const ChatBox = () => {
             padding: "10px",
             borderRadius: "20px",
           }}
+          disabled={loading}
         >
-          Send
+          {loading ? "Sending..." : "Send"}
         </button>
       </div>
     </div>
