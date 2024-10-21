@@ -1,5 +1,8 @@
 import React, { useRef, useEffect } from "react";
+
 import { useApiStore } from "../store/api/apiStore";
+
+import "../styles/style.scss";
 
 const ChatBox = () => {
   const { messages, input, loading, setInput, sendMessage } = useApiStore();
@@ -13,81 +16,31 @@ const ChatBox = () => {
   }, [messages]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        border: "1px solid gray",
-        backgroundColor: "#f4f4f4",
-      }}
-    >
-      <div
-        ref={chatContainerRef}
-        style={{
-          flex: 1,
-          overflowY: "auto",
-          padding: "10px",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+    <div className="chat-box">
+      <div ref={chatContainerRef} className="chat-box-messages">
         {messages.map((msg, index) => (
           <div
             key={index}
-            style={{
-              textAlign: msg.sender === "user" ? "right" : "left",
-              marginBottom: "8px",
-            }}
+            className={`message ${
+              msg.sender === "user" ? "user-message" : "ai-message"
+            }`}
           >
-            <span
-              style={{
-                background: msg.sender === "user" ? "#007bff" : "#e9e9e9",
-                color: msg.sender === "user" ? "#fff" : "#000",
-                padding: "8px 12px",
-                borderRadius: "12px",
-                display: "inline-block",
-              }}
-            >
-              {msg.text}
-            </span>
+            <span>{msg.text}</span>
           </div>
         ))}
 
-        {loading && <div>Loading...</div>}
+        {loading && <div className="loading">Loading...</div>}
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          padding: "10px",
-          backgroundColor: "#fff",
-          borderTop: "1px solid #ccc",
-        }}
-      >
+      <div className="chat-box-input">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && sendMessage()}
           placeholder="Ask the AI..."
-          style={{
-            flex: 1,
-            padding: "10px",
-            borderRadius: "20px",
-            border: "1px solid #ccc",
-            outline: "none",
-          }}
         />
-        <button
-          onClick={sendMessage}
-          style={{
-            marginLeft: "10px",
-            padding: "10px",
-            borderRadius: "20px",
-          }}
-          disabled={loading}
-        >
+        <button onClick={sendMessage} disabled={loading}>
           {loading ? "Sending..." : "Send"}
         </button>
       </div>

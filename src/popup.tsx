@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+
 import ChatBox from "./components/ChatBox";
+import "../src/styles/style.scss";
 
 function Popup() {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Button from "./components/Button";
+import Button from "../components/Button";
 
 function Options() {
   console.log(`this is options page`);

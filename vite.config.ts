@@ -10,4 +10,12 @@ export default defineConfig({
     react(),
     crx({ manifest: manifest as unknown as ManifestV3Export }),
   ],
+  build: {
+    rollupOptions: {
+      input: {
+        popup: "index.html",
+        options: "options.html",
+      },
+    },
+  },
 });

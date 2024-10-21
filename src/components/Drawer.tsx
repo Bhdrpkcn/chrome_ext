@@ -1,7 +1,7 @@
 import React from "react";
 
-import "../styles/styles.scss";
 import ChatBox from "./ChatBox";
+import "../styles/style.scss";
 
 interface DrawerProps {
   isOpen: boolean;
@@ -14,11 +14,9 @@ const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
       {isOpen && <div className="dark-overlay" onClick={onClose}></div>}
       <div className={`drawer ${isOpen ? "open" : ""}`}>
         <header className="header">
-          <h2>Chrome Extension App</h2>
+          <h2>What do you want to do ?</h2>
         </header>
-        <div className="chat-box-container">
-          <ChatBox />
-        </div>
+        <ChatBox />
       </div>
     </>
   );

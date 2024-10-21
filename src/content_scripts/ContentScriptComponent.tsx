@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+
 import Drawer from "../components/Drawer";
-import "../styles/styles.scss";
+import "../styles/style.scss";
 
 const ContentScriptComponent: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -10,8 +11,13 @@ const ContentScriptComponent: React.FC = () => {
   };
 
   return (
-    <div className="App">
-      <button className="blur-button" onClick={toggleDrawer}></button>
+    <div>
+      <button
+        className={`blur-button ${isDrawerOpen ? "open" : ""}`}
+        onClick={toggleDrawer}
+      >
+        ↓
+      </button>
       <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer} />
     </div>
   );

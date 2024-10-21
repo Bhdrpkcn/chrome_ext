@@ -1,0 +1,265 @@
+$drawer-width: 300px;
+$drawer-height: 50vh;
+$drawer-height-collapse: 60vh;
+$transition-speed: 0.4s;
+$button-opacity: 0.75;
+$border-color: #ccc;
+$gray-bg: #f4f4f4;
+$button-bg-user: #007bff;
+$button-bg-ai: #e9e9e9;
+$button-text-user: #fff;
+$button-text-ai: #000;
+
+// Light theme variables
+
+$light-bg: #ffffff;
+$light-text: #000000;
+$light-border: #ccc;
+$light-button-bg: #f0f0f0;
+$light-button-text: #333;
+
+// Dark theme variables
+$dark-bg: #121212;
+$dark-text: #e0e0e0;
+$dark-border: #444;
+$dark-button-bg: #333;
+$dark-button-text: #ffffff;
+
+.drawer {
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: -$drawer-height-collapse;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: $drawer-height;
+  background-color: rgba(255, 255, 255, 0.6);
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 20px;
+  transition: top $transition-speed ease;
+  backdrop-filter: blur(2px);
+  overflow: hidden;
+
+  &.open {
+    top: 0;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.5rem;
+  }
+
+  .chat-box-container {
+    margin-top: 1rem;
+    width: 100%;
+    flex: 1;
+  }
+}
+
+.blur-button {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, $button-opacity);
+  backdrop-filter: blur(1px);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  font-size: 35px;
+  z-index: 10000;
+  overflow: hidden;
+  transition: transform 0.6s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+  }
+
+  &.open {
+    transform: translateX(-50%) translateY(50vh) rotate(180deg);
+  }
+}
+
+.dark-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 9998;
+}
+
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  border-top: 1px solid $border-color;
+  background-color: $gray-bg;
+
+  .chat-box-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+
+    .message {
+      margin-bottom: 8px;
+
+      &.user-message {
+        text-align: right;
+
+        span {
+          background: $button-bg-user;
+          color: $button-text-user;
+        }
+      }
+
+      &.ai-message {
+        text-align: left;
+
+        span {
+          background: $button-bg-ai;
+          color: $button-text-ai;
+        }
+      }
+
+      span {
+        padding: 8px 12px;
+        border-radius: 12px;
+        display: inline-block;
+      }
+    }
+  }
+
+  .loading {
+    text-align: center;
+  }
+
+  .chat-box-input {
+    display: flex;
+    padding: 10px;
+    background-color: #fff;
+    border-top: 1px solid $border-color;
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 20px;
+      border: 1px solid $border-color;
+      outline: none;
+    }
+
+    button {
+      margin-left: 10px;
+      padding: 10px;
+      border-radius: 20px;
+      background-color: $button-bg-user;
+      color: $button-text-user;
+      cursor: pointer;
+
+      &:disabled {
+        background-color: #aaa;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+/* Light Theme */
+@media (prefers-color-scheme: light) {
+  .drawer {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-color: $light-border;
+  }
+
+  .chat-box {
+    background-color: $light-bg;
+    border-color: $light-border;
+
+    .chat-box-input {
+      background-color: $light-bg;
+
+      input {
+        background-color: $light-bg;
+        border-color: $light-border;
+        color: $light-text;
+      }
+
+      button {
+        background-color: $light-button-bg;
+        color: $light-button-text;
+      }
+    }
+  }
+
+  .blur-button {
+    background-color: rgba(0, 0, 0, $button-opacity);
+    color: $light-button-text;
+  }
+
+  .dark-overlay {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* Dark Theme */
+@media (prefers-color-scheme: dark) {
+  .drawer {
+    background-color: rgba(60, 60, 60, 0.85);
+    border-color: $dark-border;
+  }
+
+  .chat-box {
+    background-color: $dark-bg;
+    border-color: $dark-border;
+
+    .chat-box-messages {
+      .message {
+        &.user-message span {
+          background-color: $dark-button-bg;
+          color: $dark-button-text;
+        }
+
+        &.ai-message span {
+          background-color: $dark-button-bg;
+          color: $dark-button-text;
+        }
+      }
+    }
+
+    .chat-box-input {
+      background-color: $dark-bg;
+
+      input {
+        background-color: $dark-bg;
+        border-color: $dark-border;
+        color: $dark-text;
+      }
+
+      button {
+        background-color: $dark-button-bg;
+        color: $dark-button-text;
+      }
+    }
+  }
+
+  .blur-button {
+    background-color: rgba(255, 255, 255, $button-opacity);
+    color: $dark-button-text;
+  }
+
+  .dark-overlay {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
